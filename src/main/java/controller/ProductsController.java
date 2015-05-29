@@ -52,6 +52,8 @@ public class ProductsController {
 
         model.addAttribute("productList",productList);
 
+
+
         return "DisplayProducts";
     }
 
