@@ -23,6 +23,12 @@
             $("#cart").load($(this).attr("href"));
         });
     })
+    $(document).ready(function() {
+        $('#checkoutButton').click(function() {
+            e.preventDefault();
+            $('#cart').load($('#address').val());
+        });
+    });
 </script>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -56,10 +62,9 @@
 
 <%--Incomplete Checkout Function!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!--%>
 <div class="container">
-    <form:form class="form-group form" name="input" method="POST" action="">
-        Please enter the address: <input name="address" class="form-control" type="text" /> <br/>
-
-        <input class="form-control" type="submit" value="Checkout">
+    <form:form class="form-group form" name="input" method="POST" action="cart/checkout">
+        Please enter the address: <input class="form-control" type="text" name="address"/> <br/>
+        <input class="form-control" type="submit" id="checkoutButton" value="Checkout"/>
     </form:form>
 </div>
 

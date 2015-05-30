@@ -48,7 +48,7 @@
 </c:forEach>
 
 <div id="cart">
-<jsp:include page="Cart_Partial.jsp"/>
+<%@ include file="Cart_Partial.jsp"%>
 </div>
 </body>
 </html>

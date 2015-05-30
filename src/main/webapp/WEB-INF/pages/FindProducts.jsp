@@ -15,7 +15,7 @@
 </head>
 <body>
     <div class="container">
-    <form:form class="form-group form" name="input" method="POST" action="list">
+    <form:form class="form-group form" name="input" method="post" action="list">
       Please enter the tag: <input name="tag" class="form-control" type="text" /> <br/>
 
     <input class="form-control" type="submit" value="Submit">
