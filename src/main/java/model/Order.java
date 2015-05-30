@@ -16,6 +16,10 @@ public class Order {
         this.id = id;
     }
 
+    public Order() {
+
+    }
+
     public Order(int id, String user, String destination, String status, int shipfee, int total) {
         this.id = id;
         this.user = user;

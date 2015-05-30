@@ -8,6 +8,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -109,9 +110,16 @@ public class CartDAO {
         return true;
     }
 
-    public void getCart(int userId) {
+    public ArrayList<OrderAndCart> getUserCart(int userId) {
         String sql = "SELECT * FROM `order` LEFT JOIN `cart` ON order.orderId = cart.orderId WHERE userId = ?";
         Connection conn = null;
+
+        int checkOrderID = 0;
+
+        ArrayList<OrderAndCart> orderAndCartItems = new ArrayList<>();
+        Order userOrder = new Order();
+        ArrayList<CartItem> cartItems = new ArrayList<>();
+        boolean check = false;
 
         try {
             conn = dataSource.getConnection();
@@ -121,22 +129,32 @@ public class CartDAO {
 
             ResultSet rs = ps.executeQuery();
 
-            Cart userCart = new Cart();
-            Map<Long, CartItem> carts = new HashMap<Long, CartItem>();
-
             while (rs.next()) {
 
-                CartItem cartitem = new CartItem();
                 Product orderedProduct = new Product();
+
+                if(checkOrderID != rs.getInt("orderId")) {
+
+                    if(userOrder.getId() != 0 && !cartItems.isEmpty()) {
+                        OrderAndCart orderandCartItem = new OrderAndCart(userOrder,cartItems);
+                        orderAndCartItems.add(orderandCartItem);
+                    }
+
+                    userOrder = new Order(rs.getInt("orderId"), rs.getString("userId"), rs.getString("destination"), rs.getString("status"), rs.getInt("shippingFee"), rs.getInt("finalCost"));
+                    cartItems = new ArrayList<>();
+                    checkOrderID = rs.getInt("orderId");
+                    check = true;
+                }
+
+                CartItem cartitem = new CartItem();
 
                 orderedProduct.setPrice(rs.getInt("price"));
                 orderedProduct.setTitle(rs.getString("title"));
+
                 cartitem.setProduct(orderedProduct);
                 cartitem.setQuantity(rs.getInt("quantity"));
 
-                Order userOrder = new Order(rs.getInt("orderId"), rs.getString("userId"), rs.getString("destination"), rs.getString("status"), rs.getInt("shippingFee"), rs.getInt("finalCost"));
-
-
+                cartItems.add(cartitem);
             }
 
 
@@ -153,6 +171,72 @@ public class CartDAO {
             }
         }
 
+        return orderAndCartItems;
+
+    }
+
+
+    public ArrayList<OrderAndCart> getAllCart() {
+        String sql = "SELECT * FROM `order` LEFT JOIN `cart` ON order.orderId = cart.orderId";
+        Connection conn = null;
+
+        int checkOrderID = 0;
+
+        ArrayList<OrderAndCart> orderAndCartItems = new ArrayList<>();
+        Order userOrder = new Order();
+        ArrayList<CartItem> cartItems = new ArrayList<>();
+        boolean check = false;
+
+        try {
+            conn = dataSource.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.executeQuery();
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+
+                Product orderedProduct = new Product();
+
+                if(checkOrderID != rs.getInt("orderId")) {
+
+                    if(userOrder.getId() != 0 && !cartItems.isEmpty()) {
+                        OrderAndCart orderandCartItem = new OrderAndCart(userOrder,cartItems);
+                        orderAndCartItems.add(orderandCartItem);
+                    }
+
+                    userOrder = new Order(rs.getInt("orderId"), rs.getString("userId"), rs.getString("destination"), rs.getString("status"), rs.getInt("shippingFee"), rs.getInt("finalCost"));
+                    cartItems = new ArrayList<>();
+                    checkOrderID = rs.getInt("orderId");
+                    check = true;
+                }
+
+                CartItem cartitem = new CartItem();
+
+                orderedProduct.setPrice(rs.getInt("price"));
+                orderedProduct.setTitle(rs.getString("title"));
+
+                cartitem.setProduct(orderedProduct);
+                cartitem.setQuantity(rs.getInt("quantity"));
+
+                cartItems.add(cartitem);
+            }
+
+
+            ps.close();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {}
+            }
+        }
+
+        return orderAndCartItems;
 
     }
 

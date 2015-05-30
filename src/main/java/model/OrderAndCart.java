@@ -1,12 +1,19 @@
 package model;
 
+import java.util.ArrayList;
+
 /**
  * Created by Arun on 30-05-2015.
  */
 public class OrderAndCart {
 
     private Order order;
-    private Cart cart;
+    private ArrayList<CartItem> cartItems;
+
+    public OrderAndCart(Order order, ArrayList<CartItem> cartItems) {
+        this.order = order;
+        this.cartItems = cartItems;
+    }
 
     public Order getOrder() {
         return order;
@@ -16,16 +23,11 @@ public class OrderAndCart {
         this.order = order;
     }
 
-    public Cart getCart() {
-        return cart;
+    public ArrayList<CartItem> getCartItems() {
+        return cartItems;
     }
 
-    public OrderAndCart(Order order, Cart cart) {
-        this.order = order;
-        this.cart = cart;
-    }
-
-    public void setCart(Cart cart) {
-        this.cart = cart;
+    public void setCartItems(ArrayList<CartItem> cartItems) {
+        this.cartItems = cartItems;
     }
 }

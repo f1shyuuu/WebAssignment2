@@ -2,6 +2,7 @@ package controller;
 
 import model.Cart;
 import model.CartItemJSON;
+import model.OrderAndCart;
 import model.Product;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -29,9 +30,12 @@ public class CartController {
     @RequestMapping(value= "checkout", method = RequestMethod.POST)
     public String checkout(@RequestParam("address") String address, @ModelAttribute("cart") Cart cart) {
 
+        /*ArrayList<OrderAndCart> orderAndCartItems = new ArrayList<>();*/
+
         if(cart!=null) {
 
             cartData = new ArrayList<CartItemJSON>();
+
 
             int quantity = 0;
             int orderId = 0;
@@ -47,6 +51,10 @@ public class CartController {
             orderId = CartDAO.getInstance().addOrder(address, cart, totalCost);
 
             isSuccess = CartDAO.getInstance().addCart(cart, orderId);
+
+
+            /*orderAndCartItems = CartDAO.getInstance().getUserCart(1);
+            orderAndCartItems = CartDAO.getInstance().getAllCart();*/
 
         }
         return "Cart_Partial";
