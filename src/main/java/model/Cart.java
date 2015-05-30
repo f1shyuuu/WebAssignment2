@@ -14,6 +14,14 @@ public class Cart {
         carts = new HashMap<Long, CartItem>();
     }
 
+    public Map<Long, CartItem> getCarts() {
+        return carts;
+    }
+
+    public void setCarts(Map<Long, CartItem> carts) {
+        this.carts = carts;
+    }
+
     public void addItem(Product p) {
         long productId = p.getProductId();
         CartItem ci = carts.get(productId);
@@ -22,6 +30,7 @@ public class Cart {
         }
         else {
             ci.increaseQuentity();
+
         }
     }
 
