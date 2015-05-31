@@ -1,9 +1,6 @@
 package controller;
 
-import model.Cart;
-import model.CartItemJSON;
-import model.OrderAndCart;
-import model.Product;
+import model.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,9 +25,9 @@ public class CartController {
     private List<CartItemJSON> cartData;
 
     @RequestMapping(value= "checkout", method = RequestMethod.POST)
-    public String checkout(@RequestParam("address") String address, @ModelAttribute("cart") Cart cart) {
+    public String checkout(@RequestParam("address") String address, @ModelAttribute("cart") Cart cart, @ModelAttribute("products") ArrayList<Product>products) {
 
-        /*ArrayList<OrderAndCart> orderAndCartItems = new ArrayList<>();*/
+        ArrayList<OrderAndCart> orderAndCartItems = new ArrayList<>();
 
         if(cart!=null) {
 
@@ -48,13 +45,22 @@ public class CartController {
             String prices = "";
 
 
-            orderId = CartDAO.getInstance().addOrder(address, cart, totalCost);
+            /*orderId = CartDAO.getInstance().addOrder(address, cart, totalCost);
 
-            isSuccess = CartDAO.getInstance().addCart(cart, orderId);
+            isSuccess = CartDAO.getInstance().addCart(cart, orderId);*/
 
 
             /*orderAndCartItems = CartDAO.getInstance().getUserCart(1);
             orderAndCartItems = CartDAO.getInstance().getAllCart();*/
+
+            orderAndCartItems = CartDAO.getInstance().getUserCart(1);
+
+            for (OrderAndCart orderCart: orderAndCartItems) {
+                Order testOrder = orderCart.getOrder();
+                CartDAO.getInstance().changeStatus(testOrder);
+            }
+
+
 
         }
         return "Cart_Partial";

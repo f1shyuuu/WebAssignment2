@@ -240,5 +240,33 @@ public class CartDAO {
 
     }
 
+    public void changeStatus(Order order) {
+
+        String sql = "UPDATE `ORDER` SET status=? WHERE orderId=?";
+        Connection conn = null;
+
+        String newStatus = order.getNextStatus();
+
+        try {
+            conn = dataSource.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, newStatus);
+            ps.setInt(2, order.getId());
+            ps.executeUpdate();
+
+            ps.close();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {}
+            }
+        }
+    }
+
 
 }
