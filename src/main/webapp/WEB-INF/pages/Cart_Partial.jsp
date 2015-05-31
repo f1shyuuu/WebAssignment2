@@ -13,6 +13,17 @@
 <head>
     <title></title>
 </head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $(document).ready(function(){
+            $("#checkoutButton").click(function(e){
+                e.preventDefault();
+                $("#cart").load($(this).parent().attr("action")+'/'+$('#address').val());
+            });
+        });
+    });
+</script>
 <body>
 <h2>Items in cart</h2>
 
@@ -37,13 +48,20 @@
 
 </table>
 
-<%--Incomplete Checkout Function!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!--%>
-<div class="container">
-    <form:form class="form-group form" name="input" method="POST" action="cart/checkout">
-        Please enter the address: <input class="form-control" type="text" name="address"/> <br/>
-        <input class="form-control" type="submit" id="checkoutButton" value="Checkout"/>
-    </form:form>
-</div>
+
+<c:if test="${isSuccess == 1}" var="succeeded"/>
+<c:if test="${not succeeded}">
+        <div class="container">
+            <form:form class="form-group form" name="input" method="POST" action="list/checkout">
+                Please enter the address: <input class="form-control" type="text" id="address" name="address"/> <br/>
+                <input class="form-control" type="submit" id="checkoutButton" value="Checkout"/>
+            </form:form>
+        </div>
+</c:if>
+<c:if test="${succeeded}">
+            <label>Order Succesfully placed!</label>
+</c:if>
+
 
 
 </body>

@@ -1,9 +1,9 @@
 package controller;
 
 
+import dao.CartDAO;
 import flickr.Constants;
-import model.Cart;
-import model.Product;
+import model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,7 +28,7 @@ import java.util.List;
 @RequestMapping("/list")
 public class ProductsController {
 
-
+    private List<CartItemJSON> cartData;
 
 
     @ModelAttribute("cart")
@@ -45,8 +45,9 @@ public class ProductsController {
 
 
     @RequestMapping(method = RequestMethod.GET)
-    public String a()
+    public String a(Model model)
     {
+        model.addAttribute("isSuccess", 0);
         return "DisplayProducts";
     }
 
@@ -195,6 +196,40 @@ public class ProductsController {
         }
 
 
+    }
+
+    @RequestMapping("checkout/{address}")
+    public String checkout(Model model, @PathVariable("address") String address, @ModelAttribute("cart") Cart cart, @ModelAttribute("products") ArrayList<Product>products) {
+
+        ArrayList<OrderAndCart> orderAndCartItems = new ArrayList<>();
+
+        if(cart!=null) {
+
+            cartData = new ArrayList<CartItemJSON>();
+
+
+            int quantity = 0;
+            int orderId = 0;
+            int total = 0;
+            double totalCost = 0;
+            boolean isSuccess = false;
+
+            String titles = "";
+            String quantities = "";
+            String prices = "";
+
+
+            orderId = CartDAO.getInstance().addOrder(address, cart, totalCost);
+
+            isSuccess = CartDAO.getInstance().addCart(cart, orderId);
+
+            if(isSuccess == true) {
+                model.addAttribute("isSuccess", 1);
+            }
+
+
+        }
+        return "Cart_Partial";
     }
 
 
