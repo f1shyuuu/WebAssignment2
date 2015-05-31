@@ -279,7 +279,7 @@ public class CartDAO {
             conn = dataSource.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, orderId);
-            ps.executeUpdate();
+            ps.executeQuery();
 
             ResultSet rs = ps.executeQuery();
 
