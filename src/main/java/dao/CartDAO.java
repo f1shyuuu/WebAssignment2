@@ -268,5 +268,40 @@ public class CartDAO {
         }
     }
 
+    public Order getOrder(int orderId) {
+
+        Order userOrder = new Order();
+
+        String sql = "SELECT * FROM `order` WHERE orderId=?";
+        Connection conn = null;
+
+        try {
+            conn = dataSource.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, orderId);
+            ps.executeUpdate();
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                userOrder = new Order(rs.getInt("orderId"), rs.getString("userId"), rs.getString("destination"), rs.getString("status"), rs.getInt("shippingFee"), rs.getInt("finalCost"));
+            }
+
+            ps.close();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {}
+            }
+        }
+
+        return userOrder;
+    }
+
 
 }
