@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%--
   Created by IntelliJ IDEA.
   User: fish
@@ -14,39 +15,31 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function(){
-            $(".add").click(function(e){
+            $(".searchButton").click(function(e){
                 e.preventDefault();
-                $("#cart").load($(this).attr("href"));
+                $(".category").load($(this).parent().attr("action")+'/'+$('#tag').val());
             });
-        })
-
-        $(document).ready(function(){
-            $(".remove").click(function(e){
-                e.preventDefault();
-                $("#cart").load($(this).attr("href"));
-            });
-        })
+        });
     </script>
+
+
     <title>Catalogue page</title>
 </head>
 <br>
 
 <h1>Photo store</h1>
 
+<div class="search">
+    <form:form  method="post" action="list/category">
+        Please enter the tag: <input id="tag" name="tag" type="text"/> <br/>
+        <input class="searchButton" type="submit" value="Submit">
+    </form:form>
+</div>
+
 <h2>Product List</h2>
-
-<c:forEach var="product" items="${productList}">
-    <a href="list/add/${product.productId}" class="add">Add to cart</a>
-    <a href="list/remove/${product.productId}" class="remove">Remove from cart</a> <br>
-
-    Product Id: <c:out value="${product.productId}"/> <br>
-    Title: <c:out value="${product.title}"/> <br>
-    Description: <c:out value="${product.description}"/><br>
-    Price: <c:out value="${product.price}"/><br>
-    Photo: <img src="${product.imageUrl}"/>
-    <br><br><br>
-</c:forEach>
-
+<div class="category">
+<%@ include file="Category_Partial.jsp"%>
+</div>
 <div id="cart">
 <%@ include file="Cart_Partial.jsp"%>
 </div>

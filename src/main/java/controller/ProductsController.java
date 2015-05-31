@@ -28,6 +28,9 @@ import java.util.List;
 @RequestMapping("/list")
 public class ProductsController {
 
+
+
+
     @ModelAttribute("cart")
     public Cart createCart()
     {
@@ -40,11 +43,17 @@ public class ProductsController {
         return new ArrayList<Product>();
     }
 
-    @RequestMapping(method = RequestMethod.POST)
-    public String searchProductByTag(@RequestParam String tag, Model model,@ModelAttribute("products") ArrayList products) {
+
+    @RequestMapping(method = RequestMethod.GET)
+    public String a()
+    {
+        return "DisplayProducts";
+    }
 
 
-//        System.out.println(call(tag));
+    @RequestMapping("category/{tag}")
+    public String searchProductByTag(@PathVariable String tag, Model model,@ModelAttribute("products") ArrayList products) {
+        System.out.println("$$$$$$$");
 
         List<Product> productList = call(tag);
         products.clear();
@@ -54,10 +63,11 @@ public class ProductsController {
 
 
 
-        return "DisplayProducts";
+//        return "DisplayProducts";
+        return "Category_Partial";
     }
 
-    @RequestMapping("/add/{productId}")
+    @RequestMapping("add/{productId}")
     public String add(@PathVariable String productId, @ModelAttribute("cart") Cart cart, @ModelAttribute("products") ArrayList<Product>products) {
 
 //        System.out.println("hahahah");
@@ -70,9 +80,14 @@ public class ProductsController {
         }
 
 
-        System.out.println("The processed is " + productId);
+        //System.out.println("The processed is " + productId);
 
         long idLong=Long.parseLong(productId);
+
+        System.out.println("Add is called");
+        System.out.println("The product is : "+products);
+
+
         for(Product p:products)
         {
             long id=p.getProductId();
@@ -80,16 +95,16 @@ public class ProductsController {
             {
 
                 cart.addItem(p);
-                System.out.println(p + " will be added to cart");
+                //System.out.println(p + " will be added to cart");
             }
-            System.out.print("Cart : "+cart.getItems());
+            //System.out.print("Cart : "+cart.getItems());
         }
 
 
         return "Cart_Partial";
     }
 
-    @RequestMapping("/remove/{productId}")
+    @RequestMapping("remove/{productId}")
     public String remove(@PathVariable String productId, @ModelAttribute("cart") Cart cart, @ModelAttribute("products") ArrayList<Product>products) {
 
         if(productId.contains("}"))
@@ -98,7 +113,7 @@ public class ProductsController {
         }
 
 
-        System.out.println("The processed is " + productId);
+        //System.out.println("The processed is " + productId);
 
         long idLong=Long.parseLong(productId);
         for(Product p:products)

@@ -8,29 +8,6 @@
   To change this template use File | Settings | File Templates.
 --%>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-<script type="text/javascript">
-    $(document).ready(function(){
-        $(".add").click(function(e){
-            e.preventDefault();
-            $("#cart").load($(this).attr("href"));
-        });
-    })
-
-    $(document).ready(function(){
-        $(".remove").click(function(e){
-            e.preventDefault();
-            $("#cart").load($(this).attr("href"));
-        });
-    })
-    $(document).ready(function() {
-        $('#checkoutButton').click(function() {
-            e.preventDefault();
-            $('#cart').load($('#address').val());
-        });
-    });
-</script>
-
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -40,7 +17,7 @@
 <h2>Items in cart</h2>
 
 
-<h1>Cart: ${cart.items}</h1>
+<%--<h1>Cart: ${cart.items}</h1>--%>
 <table>
 <c:forEach var="cartItem" items="${cart.items}">
 
@@ -49,8 +26,8 @@
       <td>quantity: ${cartItem.quantity}</td>
       <td>unit price : ${cartItem.product.price}</td>
     </tr>
-    <a href="list/add/${cartItem.product.productId}" class="add">Add</a>
-    <a href="list/remove/${cartItem.product.productId}" class="remove">Delete</a> <br>
+    <%--<a href="list/add/${cartItem.product.productId}" class="add">Add</a>--%>
+    <%--<a href="list/remove/${cartItem.product.productId}" class="remove">Delete</a> <br>--%>
 
 </c:forEach>
 <tfoot>
