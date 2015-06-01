@@ -23,6 +23,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import org.json.*;
 
 /**
  * Created by fish on 15/5/26.
@@ -258,7 +259,7 @@ public class ProductsController {
             int j=0;
 
 
-            /*for(CartItem cartItem1 : cart.getItems()) {
+            for(CartItem cartItem1 : cart.getItems()) {
                 CartItemJSON c=new CartItemJSON(cartItem1.getProduct().getTitle(),cartItem1.getQuantity(),cartItem1.getProduct().getPrice());
                 cartData.add(c);
 
@@ -294,7 +295,7 @@ public class ProductsController {
                 }
                 j++;
                 System.out.println("titles"+titles);
-                System.out.println("quantites"+quantities);
+                System.out.println("quantities"+quantities);
                 System.out.println("prices"+prices);
                 ///Calling the shipping component
                 String url = "http://localhost:9000/shipping/rest/shipping?city="+address+"&quantity="+quantity+"&titles="+titles+"&quantities="+quantities+"&prices="+prices;
@@ -324,11 +325,11 @@ public class ProductsController {
                     try
                     {
                         JSONObject json = XML.toJSONObject(returnXML);
-                        JSONObject root = (JSONObject) json.get("shippingBean");
+                        JSONObject root = (JSONObject) json.get("shipping");
                         //get the message
-                        shippingmessage = root.getString("message");
+                        shippingmessage = root.getString("msg");
                         //get shipping cost
-                        shippingCost = root.getInt("shippingprice");
+                        shippingCost = root.getInt("shippingPrice");
                         System.out.println("message is: "+shippingmessage+" and shipping price is "+shippingCost);
                     }
                     catch (JSONException e)
@@ -343,19 +344,19 @@ public class ProductsController {
                     e.printStackTrace();
                 }
                 finalTotal = totalCost + shippingCost;
-                if((shippingCost != -1) && (shippingmessage.equals("AvailableDestination")))
+                if((shippingCost != -1) && (shippingmessage.equals("Destination is valid")))
                 {
                     System.out.println("Order state: receiving order");
                     //insert*/
                     orderId = CartDAO.getInstance().addOrder(address, cart, totalCost);
                     isSuccess = CartDAO.getInstance().addCart(cart, orderId);
-                   /* System.out.println("Order state: finishing cost computation");
+                    System.out.println("Order state: finishing cost computation");
                 } else
                 {
-                    System.out.println("********* you have entered invalid destination *********");
+                    System.out.println("You have entered invalid destination");
                 }
 
-            }*/
+            }
 
             if(isSuccess == true) {
                 model.addAttribute("isSuccess", 1);
