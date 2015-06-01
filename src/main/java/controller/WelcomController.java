@@ -36,10 +36,12 @@ public class WelcomController {
     }
 
     @RequestMapping(value = "display")
-    public String welcome(ModelMap modelMap) {
+    public String welcome(ModelMap modelMap, HttpSession session) {
         CartDAO cartDAO=CartDAO.getInstance();
 
-        ArrayList<OrderAndCart> displayedOrder=cartDAO.getUserCart(1);
+        int id = Integer.parseInt((String) session.getAttribute("userId"));
+
+        ArrayList<OrderAndCart> displayedOrder=cartDAO.getUserCart(id);
         System.out.println("All the orders :");
         System.out.println(displayedOrder);
 
@@ -48,9 +50,15 @@ public class WelcomController {
     }
 
     @RequestMapping(value="authenticate" , method = RequestMethod.POST)
-    public ModelAndView authenticate(@RequestParam("username") String userId, @RequestParam("password") String password){
+    public ModelAndView authenticate(@RequestParam("username") String userName, @RequestParam("password") String password, HttpSession session){
 
-        HashMap<String, String> usersMap =  CartDAO.getInstance().authenticate(userId, password);
+        HashMap<String, String> usersMap =  CartDAO.getInstance().authenticate(userName, password);
+
+        session.setAttribute("userName", usersMap.get("userName"));
+        session.setAttribute("userId", usersMap.get("userId"));
+        session.setAttribute("isValid", usersMap.get("isValid"));
+        session.setAttribute("isAdmin", usersMap.get("isAdmin"));
+
 
         if(usersMap.get("isValid")=="true" && usersMap.get("isAdmin")=="false"){
 

@@ -43,7 +43,7 @@ public class CartDAO {
         }
     }
 
-    public int addOrder(String address, Cart cart, double totalCost) {
+    public int addOrder(String address, Cart cart, double shippingCost, double finalTotal, int userId) {
 
         Integer generatedId = 0;
         String sql = "INSERT INTO `ORDER` (`userId`, `destination`, `shippingFee`, `finalCost`) VALUES (?,?,?,?)";
@@ -53,10 +53,10 @@ public class CartDAO {
         try {
             conn = dataSource.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            ps.setInt(1, 1);
+            ps.setInt(1, userId);
             ps.setString(2, address);
-            ps.setString(3, Double.toString(totalCost));
-            ps.setString(4, Double.toString(cart.getTotal()));
+            ps.setString(3, Double.toString(shippingCost));
+            ps.setString(4, Double.toString(finalTotal));
             ps.executeUpdate();
 
             ResultSet keys = ps.getGeneratedKeys();
@@ -312,6 +312,7 @@ public class CartDAO {
         HashMap<String, String> sendData = new HashMap<>();
 
         String uName = "none";
+        String uId = "none";
         String isValid = "false";
         String isAdmin = "false";
 
@@ -326,8 +327,9 @@ public class CartDAO {
 
             while (rs.next()) {
                 uName = rs.getString("userName");
+                uId = Integer.toString(rs.getInt("userId"));
                 isValid = "true";
-                if(rs.getString("roleName") == "USER_ADMIN") {
+                if(rs.getString("roleName") == "ROLE_ADMIN") {
                     isAdmin = "true";
                 } else {
                     isAdmin = "false";
@@ -348,6 +350,7 @@ public class CartDAO {
         }
 
         sendData.put("userName", uName);
+        sendData.put("userId", uId);
         sendData.put("isValid", isValid);
         sendData.put("isAdmin", isAdmin);
 

@@ -41,11 +41,22 @@
     <%--<a href="list/remove/${cartItem.product.productId}" class="remove">Delete</a> <br>--%>
 
 </c:forEach>
+
+<c:if test="${isSuccess == 1}" var="succeeded"/>
 <tfoot>
-  <td>Total price :</td>
+  <td>Product Total price :</td>
   <td> ${cart.total}</td>
 </tfoot>
-
+<c:if test="${succeeded}">
+    <tfoot>
+        <td>Shipping Cost:</td>
+        <td> ${shippingCost}</td>
+    </tfoot>
+    <tfoot>
+        <td>Total Cost:</td>
+        <td> ${finalTotal}</td>
+    </tfoot>
+</c:if>
 </table>
 
 

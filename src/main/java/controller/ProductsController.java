@@ -12,6 +12,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
 
+import javax.servlet.http.HttpSession;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.BufferedReader;
@@ -76,21 +77,14 @@ public class ProductsController {
     @RequestMapping("add/{productId}")
     public String add(@PathVariable String productId, @ModelAttribute("cart") Cart cart, @ModelAttribute("products") ArrayList<Product>products) {
 
-//        System.out.println("hahahah");
-//        System.out.println("product : " + products);
-//        System.out.println("id : "+productId);
-
         if(productId.contains("}"))
         {
              productId=productId.substring(0,productId.length()-1);
         }
 
-
-        //System.out.println("The processed is " + productId);
-
         long idLong=Long.parseLong(productId);
 
-        System.out.println("Add is called");
+        System.out.println("Add Function");
         System.out.println("The product is : "+products);
 
 
@@ -238,7 +232,7 @@ public class ProductsController {
     }*/
 
     @RequestMapping("checkout/{address}")
-    public String checkout(Model model, @PathVariable("address") String address, @ModelAttribute("cart") Cart cart, @ModelAttribute("products") ArrayList<Product>products) {
+    public String checkout(Model model, @PathVariable("address") String address, @ModelAttribute("cart") Cart cart, @ModelAttribute("products") ArrayList<Product>products, HttpSession session) {
 
         ArrayList<OrderAndCart> orderAndCartItems = new ArrayList<>();
 
@@ -347,8 +341,11 @@ public class ProductsController {
                 if((shippingCost != -1) && (shippingmessage.equals("Destination is valid")))
                 {
                     System.out.println("Order state: receiving order");
+                    int id = Integer.parseInt((String) session.getAttribute("userId"));
+                    model.addAttribute("shippingCost", shippingCost);
+                    model.addAttribute("finalTotal", finalTotal);
                     //insert*/
-                    orderId = CartDAO.getInstance().addOrder(address, cart, totalCost);
+                    orderId = CartDAO.getInstance().addOrder(address, cart, shippingCost, finalTotal, id);
                     isSuccess = CartDAO.getInstance().addCart(cart, orderId);
                     System.out.println("Order state: finishing cost computation");
                 } else
