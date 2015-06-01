@@ -329,7 +329,7 @@ public class CartDAO {
                 uName = rs.getString("userName");
                 uId = Integer.toString(rs.getInt("userId"));
                 isValid = "true";
-                if(rs.getString("roleName") == "ROLE_ADMIN") {
+                if(rs.getString("roleName").equals("ROLE_ADMIN")) {
                     isAdmin = "true";
                 } else {
                     isAdmin = "false";
