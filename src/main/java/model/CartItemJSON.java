@@ -3,7 +3,7 @@ package model;
 public class CartItemJSON {
 	private String title;
 	private int quantity;
-	private int price;
+	private double price;
 	public String getTitle() {
 		return title;
 	}
@@ -16,10 +16,10 @@ public class CartItemJSON {
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
-	public int getPrice() {
+	public double getPrice() {
 		return price;
 	}
-	public void setPrice(int price) {
+	public void setPrice(double price) {
 		this.price = price;
 	}
 	@Override
@@ -27,7 +27,7 @@ public class CartItemJSON {
 		return "CartItemJSON [title=" + title + ", quantity=" + quantity
 				+ ", price=" + price + "]";
 	}
-	public CartItemJSON(String title, int quantity, int price) {
+	public CartItemJSON(String title, int quantity, double price) {
 		this.title = title;
 		this.quantity = quantity;
 		this.price = price;

@@ -304,4 +304,55 @@ public class CartDAO {
     }
 
 
+    public HashMap<String, String> authenticate(String userName, String passWord) {
+
+        String sql = "SELECT * FROM `users` LEFT JOIN `user_roles` ON users.userId=user_roles.userId WHERE userName=? AND userPassword=?";
+        Connection conn = null;
+
+        HashMap<String, String> sendData = new HashMap<>();
+
+        String uName = "none";
+        String isValid = "false";
+        String isAdmin = "false";
+
+        try {
+            conn = dataSource.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, userName);
+            ps.setString(2, passWord);
+            ps.executeQuery();
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                uName = rs.getString("userName");
+                isValid = "true";
+                if(rs.getString("roleName") == "USER_ADMIN") {
+                    isAdmin = "true";
+                } else {
+                    isAdmin = "false";
+                }
+            }
+
+            ps.close();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {}
+            }
+        }
+
+        sendData.put("userName", uName);
+        sendData.put("isValid", isValid);
+        sendData.put("isAdmin", isAdmin);
+
+        return sendData;
+    }
+
+
 }

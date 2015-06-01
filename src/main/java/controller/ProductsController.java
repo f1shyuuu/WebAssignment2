@@ -14,8 +14,12 @@ import org.w3c.dom.NodeList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -198,7 +202,7 @@ public class ProductsController {
 
     }
 
-    @RequestMapping("checkout/{address}")
+   /* @RequestMapping("checkout/{address}")
     public String checkout(Model model, @PathVariable("address") String address, @ModelAttribute("cart") Cart cart, @ModelAttribute("products") ArrayList<Product>products) {
 
         ArrayList<OrderAndCart> orderAndCartItems = new ArrayList<>();
@@ -229,6 +233,136 @@ public class ProductsController {
 
 
         }
+        return "Cart_Partial";
+    }*/
+
+    @RequestMapping("checkout/{address}")
+    public String checkout(Model model, @PathVariable("address") String address, @ModelAttribute("cart") Cart cart, @ModelAttribute("products") ArrayList<Product>products) {
+
+        ArrayList<OrderAndCart> orderAndCartItems = new ArrayList<>();
+
+        if(cart!=null) {
+
+            cartData = new ArrayList<CartItemJSON>();
+
+
+            int quantity = 0;
+            int orderId = 0;
+            double totalCost = 0;
+            double finalTotal = 0;
+            boolean isSuccess = false;
+
+            String titles = "";
+            String quantities = "";
+            String prices = "";
+            int j=0;
+
+
+            /*for(CartItem cartItem1 : cart.getItems()) {
+                CartItemJSON c=new CartItemJSON(cartItem1.getProduct().getTitle(),cartItem1.getQuantity(),cartItem1.getProduct().getPrice());
+                cartData.add(c);
+
+                quantity = quantity + c.getQuantity();
+                totalCost = totalCost + cartItem1.getProduct().getPrice();
+
+                String titleToProcess = cartItem1.getProduct().getTitle();
+                String[] tempTitles = titleToProcess.split("\\s+");
+                String formattedTitles = "";
+
+                for(int k=0; k<tempTitles.length;k++) {
+                    if(k==0) {
+                        formattedTitles = tempTitles[k];
+                    } else {
+                        formattedTitles = formattedTitles + "___" +tempTitles[k];
+                    }
+                }
+
+                if(j==0) {
+                    //prepare titles
+                    titles = formattedTitles;
+                    //prepare quantities
+                    quantities = Integer.toString(cartItem1.getQuantity());
+                    //prepare prices
+                    prices = Double.toString(cartItem1.getProduct().getPrice());
+                } else {
+                    //prepare titles
+                    titles = titles+"||"+formattedTitles;
+                    //prepare quantities
+                    quantities = quantities+","+Integer.toString(cartItem1.getQuantity());
+                    //prepare prices
+                    prices = prices+","+Double.toString(cartItem1.getProduct().getPrice());
+                }
+                j++;
+                System.out.println("titles"+titles);
+                System.out.println("quantites"+quantities);
+                System.out.println("prices"+prices);
+                ///Calling the shipping component
+                String url = "http://localhost:9000/shipping/rest/shipping?city="+address+"&quantity="+quantity+"&titles="+titles+"&quantities="+quantities+"&prices="+prices;
+                String shippingmessage ="";
+                int shippingCost = -1;
+                System.out.println("url "+url);
+                URL callUrl;
+                try {
+                    callUrl = new URL(url);
+                    HttpURLConnection urlConnection;
+                    urlConnection = (HttpURLConnection) callUrl.openConnection();
+                    InputStream urlStream = urlConnection.getInputStream();
+                    System.out.println(urlConnection.getResponseCode());
+                    if (urlConnection.getResponseCode() != 200) {
+                        throw new RuntimeException("Failed : HTTP error code : "
+                                + urlConnection.getResponseCode());
+                    }
+                    BufferedReader br = new BufferedReader(new InputStreamReader(urlStream));
+
+                    String output;
+                    String returnXML = "";
+                    while((output = br.readLine()) != null)
+                    {
+                        returnXML+=output;
+                    }
+
+                    try
+                    {
+                        JSONObject json = XML.toJSONObject(returnXML);
+                        JSONObject root = (JSONObject) json.get("shippingBean");
+                        //get the message
+                        shippingmessage = root.getString("message");
+                        //get shipping cost
+                        shippingCost = root.getInt("shippingprice");
+                        System.out.println("message is: "+shippingmessage+" and shipping price is "+shippingCost);
+                    }
+                    catch (JSONException e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
+                catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                }
+                finalTotal = totalCost + shippingCost;
+                if((shippingCost != -1) && (shippingmessage.equals("AvailableDestination")))
+                {
+                    System.out.println("Order state: receiving order");
+                    //insert*/
+                    orderId = CartDAO.getInstance().addOrder(address, cart, totalCost);
+                    isSuccess = CartDAO.getInstance().addCart(cart, orderId);
+                   /* System.out.println("Order state: finishing cost computation");
+                } else
+                {
+                    System.out.println("********* you have entered invalid destination *********");
+                }
+
+            }*/
+
+            if(isSuccess == true) {
+                model.addAttribute("isSuccess", 1);
+            }
+        }
+
+
         return "Cart_Partial";
     }
 
