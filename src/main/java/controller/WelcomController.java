@@ -30,6 +30,8 @@ public class WelcomController {
 
         if(check == null){
             return "login";
+        } else if((String)session.getAttribute("userId") == "none"){
+            return "login";
         }
 
         return "redirect:display";
