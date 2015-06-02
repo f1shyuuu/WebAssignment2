@@ -303,6 +303,58 @@ public class CartDAO {
         return userOrder;
     }
 
+    public Cart getCart(int orderId) {
+        Order userOrder = new Order();
+
+        Cart orderCart = new Cart();
+        HashMap<Long,CartItem> cartItemList = new HashMap<>();
+
+        String sql = "SELECT * FROM `order` LEFT JOIN `cart` ON order.orderId=cart.orderId WHERE orderId=?";
+        Connection conn = null;
+
+        try {
+            conn = dataSource.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, orderId);
+            ps.executeQuery();
+
+            ResultSet rs = ps.executeQuery();
+
+
+
+            while (rs.next()) {
+                CartItem tempCartItem = new CartItem();
+                Product tempProduct = new Product();
+
+                tempProduct.setTitle(rs.getString("title"));
+                tempProduct.setPrice(rs.getDouble("price"));
+                tempProduct.setProductId(rs.getInt("id"));
+
+                tempCartItem.setQuantity(rs.getInt("quantity"));
+                tempCartItem.setProduct(tempProduct);
+
+                cartItemList.put(rs.getLong("id"), tempCartItem);
+            }
+
+            ps.close();
+
+            orderCart.setCarts(cartItemList);
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {}
+            }
+        }
+
+        return orderCart;
+
+    }
+
 
     public HashMap<String, String> authenticate(String userName, String passWord) {
 
