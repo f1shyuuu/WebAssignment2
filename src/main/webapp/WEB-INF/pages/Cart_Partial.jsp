@@ -21,6 +21,14 @@
                 e.preventDefault();
                 $("#cart").load($(this).parent().attr("action")+'/'+$('#address').val());
             });
+            $(".add").click(function(e){
+                e.preventDefault();
+                $("#cart").load($(this).attr("href"));
+            });
+            $(".remove").click(function(e){
+                e.preventDefault();
+                $("#cart").load($(this).attr("href"));
+            });
         });
     });
 </script>
@@ -37,8 +45,8 @@
       <td>quantity: ${cartItem.quantity}</td>
       <td>unit price : ${cartItem.product.price}</td>
     </tr>
-    <%--<a href="list/add/${cartItem.product.productId}" class="add">Add</a>--%>
-    <%--<a href="list/remove/${cartItem.product.productId}" class="remove">Delete</a> <br>--%>
+    <a href="list/add/${cartItem.product.productId}" class="add">Add</a>
+    <a href="list/remove/${cartItem.product.productId}" class="remove">Delete</a> <br>
 
 </c:forEach>
 
