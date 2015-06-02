@@ -80,8 +80,92 @@ public class CartDAO {
         return generatedId;
     }
 
+    public int editOrder(String address, Cart cart, double shippingCost, double finalTotal, int userId, int orderId) {
+
+        Integer generatedId = 0;
+        String sql = "UPDATE `ORDER` set `userId`=?, `destination`=?, `shippingFee`=?, `finalCost`=? WHERE orderId=?";
+        Connection conn = null;
+
+
+        try {
+            conn = dataSource.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, userId);
+            ps.setString(2, address);
+            ps.setString(3, Double.toString(shippingCost));
+            ps.setString(4, Double.toString(finalTotal));
+            ps.setInt(4, orderId);
+            ps.executeUpdate();
+
+            ps.close();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {}
+            }
+        }
+
+        return generatedId;
+    }
+
+
 
     public boolean addCart(Cart cart, int orderId) {
+        String sql = "INSERT INTO `cart` (`orderId`, `title`, `quantity`, `price`) VALUES (?,?,?,?)";
+        Connection conn = null;
+
+        for(CartItem cartItem : cart.getItems()) {
+            try {
+                conn = dataSource.getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ps.setInt(1, orderId);
+                ps.setString(2, cartItem.getProduct().getTitle());
+                ps.setInt(3, cartItem.getQuantity());
+                ps.setDouble(4, cartItem.getProduct().getPrice());
+                ps.executeUpdate();
+                ps.close();
+
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+
+            } finally {
+                if (conn != null) {
+                    try {
+                        conn.close();
+                    } catch (SQLException e) {}
+                }
+            }
+        }
+        return true;
+    }
+
+    public boolean editCart(Cart cart, int orderId) {
+        String sql1 = "DELETE FROM `cart` WHERE orderId=?";
+        Connection conn1 = null;
+
+        try {
+            conn1 = dataSource.getConnection();
+            PreparedStatement ps = conn1.prepareStatement(sql1);
+            ps.setInt(1, orderId);
+            ps.executeQuery();
+            ps.close();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+
+        } finally {
+            if (conn1 != null) {
+                try {
+                    conn1.close();
+                } catch (SQLException e) {}
+            }
+        }
+
         String sql = "INSERT INTO `cart` (`orderId`, `title`, `quantity`, `price`) VALUES (?,?,?,?)";
         Connection conn = null;
 
