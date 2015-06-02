@@ -91,7 +91,11 @@ public class WelcomController {
         return "redirect:/";
     }
 
+    @RequestMapping(value = "/back", method = RequestMethod.GET)
+    public String back(){
 
+        return "redirect:display";
+    }
 
 
 

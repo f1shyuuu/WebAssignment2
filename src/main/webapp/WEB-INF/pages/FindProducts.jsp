@@ -30,7 +30,11 @@
     <h3>Order summary:<br></h3>
     <b>
 
-<a href="/list/edit/${o.order.id}">Edit Order</a>
+        <form:form action="list/edit" method="post">
+            <input type="text" name="orderId" value="${o.order.id}" style="display: none;  ">
+            <input type="submit" value="Edit Order"><br>
+        </form:form>
+
     Status : <c:out value="${o.order.status}"></c:out>
     Destination : <c:out value="${o.order.destination}"></c:out>
     Shipping fee : <c:out value="${o.order.shipfee}"></c:out>
