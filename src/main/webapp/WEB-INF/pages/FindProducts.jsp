@@ -13,7 +13,7 @@
     <title>Photo Shop</title>
 
 </head>
-<body>
+
 <%--<div class="container">--%>
     <%--<form:form class="form-group form" name="input" method="post" action="list">--%>
         <%--Please enter the tag: <input name="tag" class="form-control" type="text"/> <br/>--%>
@@ -28,18 +28,18 @@
 <h1>Here is your order history</h1>
 <c:forEach var="o" items="${userOrders}">
     <h3>Order summary:<br></h3>
-    <b>
 
+    <c:if test="${o.order.status == 'processing'}">
         <form:form action="list/edit" method="post">
             <input type="text" name="orderId" value="${o.order.id}" style="display: none;  ">
             <input type="submit" value="Edit Order"><br>
         </form:form>
-
+    </c:if>
     Status : <c:out value="${o.order.status}"></c:out>
     Destination : <c:out value="${o.order.destination}"></c:out>
     Shipping fee : <c:out value="${o.order.shipfee}"></c:out>
     Total fee : <c:out value="${o.order.total}"></c:out>
-    </b>
+    </
     <h3><br>Order details :</h3>
     <c:forEach var="c" items="${o.cartItems}">
         Title :<c:out value="${c.product.title}"></c:out>
