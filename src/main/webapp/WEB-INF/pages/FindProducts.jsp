@@ -24,12 +24,13 @@
 
 <h1 style="color: #5cb85c"> <a href="/list">Go to category</a> </h1>
 
-<a href="/logout">Log Out</a>
+<div style="text-align:right"><a href="/logout" >Log Out</a></div>
 <h1>Here is your order history</h1>
 <c:forEach var="o" items="${userOrders}">
-    <a href="/edit/${o.order.id}">Edit Item</a>
     <h3>Order summary:<br></h3>
     <b>
+
+<a href="/edit/${o.order.id}">Edit Order</a>
     Status : <c:out value="${o.order.status}"></c:out>
     Destination : <c:out value="${o.order.destination}"></c:out>
     Shipping fee : <c:out value="${o.order.shipfee}"></c:out>

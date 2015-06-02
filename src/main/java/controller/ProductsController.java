@@ -236,8 +236,8 @@ public class ProductsController {
         return "Cart_Partial";
     }*/
 
-    @RequestMapping("checkout/{address}")
-    public String checkout(Model model, @PathVariable("address") String address, @ModelAttribute("cart") Cart cart, @ModelAttribute("products") ArrayList<Product>products, HttpSession session) {
+    @RequestMapping("checkout/{address}/{orderId}")
+    public String checkout(Model model, @PathVariable("address") String address, @PathVariable("orderId") int passedOrderId, @ModelAttribute("cart") Cart cart, @ModelAttribute("products") ArrayList<Product>products, HttpSession session) {
 
         ArrayList<OrderAndCart> orderAndCartItems = new ArrayList<>();
 

@@ -1,19 +1,19 @@
 package controller;
 
 import dao.CartDAO;
+import model.Cart;
 import model.OrderAndCart;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 import javax.xml.ws.RequestWrapper;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by fish on 15/5/27.
@@ -92,11 +92,23 @@ public class WelcomController {
     }
 
     @RequestMapping(value="edit/{orderId}", method = RequestMethod.GET)
-    public String edit(@PathVariable("orderId") int orderId){
+    public String edit(@PathVariable("orderId") String orderId, Model model){
 
+        CartDAO cartDAO = CartDAO.getInstance();
+        Cart orderCart = cartDAO.getCart(Integer.parseInt(orderId));
+        model.addAttribute("cart", orderCart);
 
-
+        model.addAttribute("orderId",Integer.parseInt(orderId));
         return "DisplayProducts";
     }
+
+    @RequestMapping(value = "/back", method = RequestMethod.GET)
+    public String back(){
+
+        return "redirect:display";
+    }
+
+
+
 
 }

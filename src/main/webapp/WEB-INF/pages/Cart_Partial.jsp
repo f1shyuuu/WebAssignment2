@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="address" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: fish
@@ -19,7 +20,7 @@
         $(document).ready(function(){
             $("#checkoutButton").click(function(e){
                 e.preventDefault();
-                $("#cart").load($(this).parent().attr("action")+'/'+$('#address').val());
+                $("#cart").load($(this).parent().attr("action")+'/'+$('#address').val()+'/'+$('#orderId').val());
             });
             $(".add").click(function(e){
                 e.preventDefault();
@@ -72,7 +73,13 @@
 <c:if test="${not succeeded}">
         <div class="container">
             <form:form class="form-group form" name="input" method="POST" action="list/checkout">
-                Please enter the address: <input class="form-control" type="text" id="address" name="address"/> <br/>
+                <c:if test="${not empty orderId}">
+                    <input type="text" name="orderId" id="orderId" value="${orderId}" style="display: none"/>
+                </c:if>
+                <c:if test="${empty orderId}">
+                    <input type="text" name="orderId" id="orderId" value="-1" style="display: none"/>
+                </c:if>
+                Please enter the address:address: <input class="form-control" type="text" id="address" name="address"/> <br/>
                 <input class="form-control" type="submit" id="checkoutButton" value="Checkout"/>
             </form:form>
         </div>

@@ -26,7 +26,8 @@
     <title>Catalogue page</title>
 </head>
 <br>
-<a href="/logout">Log Out</a>
+<div style="text-align:right"><a href="/logout" >Log Out</a></div>
+<div style="text-align:left"><a href="/back" >Back</a></div>
 <h1>Photo store</h1>
 
 <div class="search">
