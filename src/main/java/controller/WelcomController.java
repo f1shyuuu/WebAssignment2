@@ -4,6 +4,7 @@ import dao.CartDAO;
 import model.OrderAndCart;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -41,6 +42,10 @@ public class WelcomController {
     public String welcome(ModelMap modelMap, HttpSession session) {
         CartDAO cartDAO=CartDAO.getInstance();
 
+        if(session.getAttribute("userId") == null){
+            return "redirect:/";
+        }
+
         int id = Integer.parseInt((String) session.getAttribute("userId"));
 
         ArrayList<OrderAndCart> displayedOrder=cartDAO.getUserCart(id);
@@ -75,5 +80,23 @@ public class WelcomController {
 
     }
 
+    @RequestMapping(value = "logout", method = RequestMethod.GET )
+    public String logout(HttpSession session) {
+
+        session.removeAttribute("userName");
+        session.removeAttribute("userId");
+        session.removeAttribute("isValid");
+        session.removeAttribute("isAdmin");
+
+        return "redirect:/";
+    }
+
+    @RequestMapping(value="edit/{orderId}", method = RequestMethod.GET)
+    public String edit(@PathVariable("orderId") int orderId){
+
+
+
+        return "DisplayProducts";
+    }
 
 }

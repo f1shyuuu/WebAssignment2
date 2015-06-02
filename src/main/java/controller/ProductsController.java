@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
@@ -51,10 +52,14 @@ public class ProductsController {
 
 
     @RequestMapping(method = RequestMethod.GET)
-    public String a(Model model)
+    public ModelAndView a(Model model, HttpSession session)
     {
+        if(session.getAttribute("userId") == null){
+            return new ModelAndView("redirect:/");
+        }
+
         model.addAttribute("isSuccess", 0);
-        return "DisplayProducts";
+        return new ModelAndView("DisplayProducts");
     }
 
 
