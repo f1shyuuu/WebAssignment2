@@ -292,7 +292,7 @@ public class ProductsController {
                 System.out.println("quantities"+quantities);
                 System.out.println("prices"+prices);
                 ///Calling the shipping component
-                String url = "http://localhost:9000/shipping/rest/shipping?city="+address+"&quantity="+quantity+"&titles="+titles+"&quantities="+quantities+"&prices="+prices;
+                String url = "http://localhost:9000/shippingModule/service/shipping?city="+address+"&quantity="+quantity+"&titles="+titles+"&quantities="+quantities+"&prices="+prices;
                 String shippingmessage ="";
                 int shippingCost = -1;
                 System.out.println("url "+url);

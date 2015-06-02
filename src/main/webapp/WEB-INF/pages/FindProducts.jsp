@@ -22,7 +22,7 @@
     <%--</form:form>--%>
 <%--</div>--%>
 
-<h1 style="color: #5cb85c"> <a href="/list">Go to catagory</a> </h1>
+<h1 style="color: #5cb85c"> <a href="/list">Go to category</a> </h1>
 
 
 <h1>Here is your order history</h1>
