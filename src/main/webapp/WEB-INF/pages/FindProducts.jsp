@@ -30,7 +30,7 @@
     <h3>Order summary:<br></h3>
     <b>
 
-<a href="/edit/${o.order.id}">Edit Order</a>
+<a href="/list/edit/${o.order.id}">Edit Order</a>
     Status : <c:out value="${o.order.status}"></c:out>
     Destination : <c:out value="${o.order.destination}"></c:out>
     Shipping fee : <c:out value="${o.order.shipfee}"></c:out>

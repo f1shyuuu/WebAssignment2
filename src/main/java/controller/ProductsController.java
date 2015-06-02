@@ -235,8 +235,25 @@ public class ProductsController {
         return "Cart_Partial";
     }*/
 
+    @RequestMapping(value="edit/{orderId}", method = RequestMethod.GET)
+    public String edit(@PathVariable("orderId") String orderId, Model model){
+
+        CartDAO cartDAO = CartDAO.getInstance();
+        Cart orderCart = cartDAO.getCart(Integer.parseInt(orderId));
+        model.addAttribute("cart", orderCart);
+
+        model.addAttribute("orderId",Integer.parseInt(orderId));
+        return "DisplayProducts";
+    }
+
+    @RequestMapping(value = "/back", method = RequestMethod.GET)
+    public String back(){
+
+        return "redirect:display";
+    }
+
     @RequestMapping("checkout/{address}/{orderId}")
-    public String checkout(Model model, @PathVariable("address") String address, @PathVariable("orderId") int passedOrderId, @ModelAttribute("cart") Cart cart, @ModelAttribute("products") ArrayList<Product>products, HttpSession session) {
+    public String checkout(Model model, @PathVariable("address") String address, @PathVariable("orderId") String passedOrderId, @ModelAttribute("cart") Cart cart, @ModelAttribute("products") ArrayList<Product>products, HttpSession session) {
 
         ArrayList<OrderAndCart> orderAndCartItems = new ArrayList<>();
 
