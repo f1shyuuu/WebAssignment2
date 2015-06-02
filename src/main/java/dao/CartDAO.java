@@ -388,12 +388,11 @@ public class CartDAO {
     }
 
     public Cart getCart(int orderId) {
-        Order userOrder = new Order();
 
         Cart orderCart = new Cart();
         HashMap<Long,CartItem> cartItemList = new HashMap<>();
 
-        String sql = "SELECT * FROM `order` LEFT JOIN `cart` ON order.orderId=cart.orderId WHERE orderId=?";
+        String sql = "SELECT * FROM `order` LEFT JOIN `cart` ON order.orderId=cart.orderId WHERE order.orderId=?";
         Connection conn = null;
 
         try {
